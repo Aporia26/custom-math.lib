@@ -2,23 +2,36 @@
 
 A lightweight, and data-oriented custom mathematical library built from scratch in C and C++. This repository features a purely functional vector and matrix.
 
-## 🚀 Features
+## Features
 
-- **Vector Mathematics (`Vector.h` / `Vector.cpp`)**: 3D vector operations using passing-by-const-reference to completely eliminate unnecessary memory copies.
-- **Matrix Engineering (`Matrices.h`)**: Flat 1D array row/column architecture for linear transformations.
-- **Defensive Algorithm Design (`Quadratic_Eqn.c`)**: A zero-dependency C-style quadratic equation solver containing validation barriers to dynamically mitigate domain errors (like square roots of negative values) and division-by-zero exceptions.
+### 1. Vector Operations (`Vector.h` / `Vector.cpp`)
+* 2D and 3D floating-point vector implementations.
+* Basic arithmetic operations (Vector addition, subtraction, scalar multiplication).
+* Geometric calculations including Magnitude, Normalization, Dot Product, and Cross Product.
+
+### 2. Matrix Operations (`Matrices.h` / `Matrices.cpp`)
+* Custom structural layout optimized for 3x3 matrices using 0-based, row-major indexing arrays.
+* Core algebraic evaluations including:
+  * Determinant evaluation via standard cofactor expansion.
+  * Matrix multiplication using row-by-column dot product sequences.
+  * Structural maps built for transform matrices.
+
+### 3. Algebraic Utilities (`Quadratic_Eqn.c`)
+* Pure C function modules for determining real and complex roots using the quadratic formula.
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
+
+The core library files are located within the `/source` directory:
 
 ```text
-custom-math.lib/
-└── source/
-    ├── Vector.h          # 3D Vector structure declarations and functional interfaces
-    ├── Vector.cpp        # Optimized math implementations for vector mechanics
-    ├── Matrices.h        # 3x3 and 4x4 matrix storage blueprints & linear math
-    └── Quadratic_Eqn.c   # Self-contained standalone CLI quadratic equation solver
+source/
+├── Matrices.h        # Struct definitions and declarations for matrix operations (e.g., mat3x3)
+├── Matrices.cpp      # Implementation of matrix determinants, multiplication, and transformations
+├── Vector.h          # Struct definitions for 2D/3D vectors
+├── Vector.cpp        # Implementation of vector arithmetic, dot products, and cross products
+└── Quadratic_Eqn.c   # Pure C utility implementation for parsing and solving quadratic equations
 ```
 
 ---
@@ -55,24 +68,26 @@ Matrices leverage continuous 1D block allocation (`float m[16]`) ensuring absolu
 
 ```cpp
 #include "source/Matrices.h"
+#include <iostream>
 
-// Initialize an identity tracking pipeline
-mat4 pipeline = mat4_identity();
+int main() {
+    // Initialize a 3x3 Matrix in row-major configuration
+    mat3x3 A;
+    A.element[0] = 1.0f; A.element[1] = 0.0f; A.element[2] = 2.0f;
+    A.element[3] = 0.0f; A.element[4] = 3.0f; A.element[5] = 0.0f;
+    A.element[6] = 4.0f; A.element[7] = 0.0f; A.element[8] = 5.0f;
 
-// Combine geometric translations via matrix multiplication
-mat4 transformation = mat4_multiply(pipeline, another_matrix);
+    // Compute determinant
+    float determinant = det(A);
+    std::cout << "Matrix Determinant: " << determinant << std::endl;
+
+    return 0;
+}
 ```
 
 ### 3. Quadratic Solver CLI
 A protected command-line algorithm ensuring stable coefficient validation before processing the core quadratic equations.
 
-```bash
-# Compilation
-gcc source/Quadratic_Eqn.c -o quad_solver -lm
-
-# Execution
-./quad_solver
-```
 
 ---
 
@@ -85,11 +100,9 @@ Unlike traditional object-oriented structures that couple heavy class behaviors 
 -->
 ---
 
-## ⚙️ Compilation & Integration
-
-To bring these modules directly into a standard C++ compilation pipeline, invoke your favorite toolchain including the source definitions directly:
+### C++ Compilation Example
+Ensure you compile both the header configurations and implementation source configurations together using your compiler toolset (e.g., MSVC, GCC, or Clang):
 
 ```bash
-# Example manual GCC linkage
-g++ -std=c++17 main.cpp source/Vector.cpp -o main_executable
+g++ -O3 main.cpp source/Vector.cpp source/Matrices.cpp source/Quadratic_Eqn.c -o MyGameMathApp
 ```
